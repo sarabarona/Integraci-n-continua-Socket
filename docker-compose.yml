@@ -4,19 +4,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-server
-    networks:
-      - my_network
     ports:
       - "8080:8080"
-
   client:
     build:
       context: .
       dockerfile: Dockerfile-client
-    networks:
-      - my_network
     depends_on:
       - server
-
-networks:
-  my_network:
+    network_mode: "service:server"

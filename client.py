@@ -1,13 +1,23 @@
 import socket
+import time
 
-def start_client():
+# Configuración del cliente
+HOST = 'server'  # Nombre del servicio del servidor en Docker Compose
+PORT = 8080
+
+# Esperar unos segundos para asegurarse de que el servidor esté listo
+time.sleep(5)
+
+try:
+    # Crear el socket del cliente
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(('server', 8080))
-    message = "Hola desde el cliente!"
-    client_socket.send(message.encode())
-    response = client_socket.recv(1024).decode()
-    print(f"Respuesta del servidor: {response}")
-    client_socket.close()
+    client_socket.connect((HOST, PORT))
 
-if __name__ == "__main__":
-    start_client()
+    message = "Hola desde el cliente"
+    client_socket.sendall(message.encode())
+    data = client_socket.recv(1024)
+    print(f"Recibido: {data.decode()}")
+
+    client_socket.close()
+except Exception as e:
+    print(f"Error: {e}")
